@@ -1,0 +1,9 @@
+.dialog-page {
+    display: grid;
+    grid-template-columns: 2fr 10fr;
+    padding: 10px;
+}
+
+.person .active {
+    color: gold;
+}
