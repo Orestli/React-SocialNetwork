@@ -1,19 +1,12 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
+import Paginator from "../common/Paginator/Paginator";
 
 function Users(props) {
     return (
         <div className="users-wrapper">
-            <div>
-                {
-                    props.pages.map(p => {
-                        return (
-                            <span className={props.currentPage === p && "selectedPage"}
-                                  onClick={(e) => {props.onPageChanged(p)}}>{p} </span>
-                        )
-                    })
-                }
-            </div>
+            <Paginator totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} currentPage={props.currentPage} onPageChanged={props.onPageChanged}/>
+            {/*<Paginator pages={props.pages} currentPage={props.currentPage} onPageChanged={props.onPageChanged}/>*/}
             <ul className="users-list">
                 {
                     props.users.map(data => {

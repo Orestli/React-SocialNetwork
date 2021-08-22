@@ -10,11 +10,11 @@ import HeaderContainer from "../Header/HeaderContainer";
 
 const Input = Element("input");
 
-const LoginForm = (props) => {
+const LoginForm = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             {
-                props.error ? <div className="form-summary-error">{props.error}</div> : null
+                error ? <div className="form-summary-error">{error}</div> : null
             }
             <div>
                 <Field component={Input} name={'email'} type={'text'} validate={[required]} placeholder={'Login'}/>

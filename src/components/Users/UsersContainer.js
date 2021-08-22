@@ -29,20 +29,11 @@ class UsersComponent extends React.Component {
     }
 
     render() {
-        const pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
-
-        const pages = [];
-
-        for (let i = 1; i <= pagesCount; i++) {
-            pages.push(i)
-        }
-
         return (
             <>
                 {this.props.isFetching ? <Preloader /> : null}
                 <Users totalUsersCount={this.props.totalUsersCount}
                        pageSize={this.props.pageSize}
-                       pages = {pages}
                        currentPage={this.props.currentPage}
                        users={this.props.users}
                        onPageChanged={this.onPageChanged}

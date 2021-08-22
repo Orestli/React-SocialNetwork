@@ -1,5 +1,4 @@
-import ProfileContainer from "./components/Profile/ProfileContainer";
-import MessengerContainer from "./components/Messenger/MessengerContainer";
+import React from "react";
 import UsersContainer from "./components/Users/UsersContainer";
 import {
     BrowserRouter as Router,
@@ -11,6 +10,9 @@ import {Component} from "react";
 import {connect} from "react-redux";
 import {initializeApp} from "./redux/app-reducer";
 import Preloader from "./components/common/Preloader/Preloader";
+
+const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const MessengerContainer = React.lazy(() => import('./components/Messenger/MessengerContainer'));
 
 class App extends Component {
     componentDidMount() {
@@ -24,15 +26,17 @@ class App extends Component {
             return (
                 <Router>
                     <div className="App">
-                        <HeaderContainer/>
-                        <Route path="/profile/:userId?"
-                               render={() => <ProfileContainer/>}/>
-                        <Route path="/messenger"
-                               render={() => <MessengerContainer/>}/>
-                        <Route path="/users"
-                               render={() => <UsersContainer/>}/>
-                        <Route path="/login"
-                               render={() => <Login/>}/>
+                        <React.Suspense fallback={<Preloader/>}>
+                            <HeaderContainer/>
+                            <Route path="/profile/:userId?"
+                                   render={() => <ProfileContainer/>}/>
+                            <Route path="/messenger"
+                                   render={() => <MessengerContainer/>}/>
+                            <Route path="/users"
+                                   render={() => <UsersContainer/>}/>
+                            <Route path="/login"
+                                   render={() => <Login/>}/>
+                        </React.Suspense>
                     </div>
                 </Router>
             );

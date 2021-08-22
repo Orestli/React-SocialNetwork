@@ -7,7 +7,7 @@ import {Element} from "../common/FormsContorls/FormsContorls";
 import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 
 const Post = (props) => (
-    props.posts.map(data => {
+    [...props.posts].reverse().map(data => {
         return (
             <div><p>{data.value} (Views: {data.views})</p></div>
         )
