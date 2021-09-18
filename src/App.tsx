@@ -16,6 +16,7 @@ const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileCo
 // @ts-ignore
 const MessengerContainer = React.lazy(() => import('./components/Messenger/MessengerContainer'));
 
+<<<<<<< HEAD:src/App.tsx
 type mapStateToPropsType = {
     initialized: boolean
 }
@@ -57,6 +58,44 @@ const App: React.FC<AppType> = (props) => {
                 </div>
             </Router>
         );
+=======
+class App extends Component {
+    componentDidMount() {
+        this.props.initializeApp();
+
+        window.addEventListener('unhandledrejection', () => alert('Some error occurred'))
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('unhandledrejection', () => alert('Some error occurred'))
+    }
+
+    render() {
+        if (!this.props.initialized) {
+            return <Preloader />
+        } else {
+            return (
+                <Router>
+                    <div className="App">
+                        <Switch>
+                            <React.Suspense fallback={<Preloader/>}>
+                                <HeaderContainer/>
+                                <Redirect from={'/'} to={'/profile'}/>
+                                <Route path="/profile/:userId?"
+                                       render={() => <ProfileContainer/>}/>
+                                <Route path="/messenger"
+                                       render={() => <MessengerContainer/>}/>
+                                <Route path="/users"
+                                       render={() => <UsersContainer/>}/>
+                                <Route path="/login"
+                                       render={() => <Login/>}/>
+                            </React.Suspense>
+                        </Switch>
+                    </div>
+                </Router>
+            );
+        }
+>>>>>>> 2168b5cfc8651cef8a12db09eeb1fd0403ebda77:src/App.js
     }
 }
 

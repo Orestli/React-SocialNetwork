@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {connect} from "react-redux";
 import Users from "./Users";
 import Preloader from "../common/Preloader/Preloader";
@@ -34,7 +34,7 @@ type MapDispatchPropsType = {
 
 type PropsType = MapStatePropsType & MapDispatchPropsType
 
-class _UsersComponent extends React.Component<PropsType> {
+class UsersComponent extends React.Component<PropsType> {
     componentDidMount() {
         this.props.getUsers(this.props.currentPage, this.props.pageSize);
     }
@@ -61,39 +61,16 @@ class _UsersComponent extends React.Component<PropsType> {
     }
 }
 
-const UsersComponent: React.FC<PropsType> = (props) => {
-    useEffect(() => {
-        props.getUsers(props.currentPage, props.pageSize);
-    }, [])
-
-    const onPageChanged = (pageNumber: number) => {
-        props.getUsers(pageNumber, props.pageSize);
+const mapStateToProps = (state: StateType): MapStatePropsType => {
+    return {
+        users: getUserSelector(state),
+        pageSize: _getPageSize(state),
+        totalUsersCount: _getTotalUsersCount(state),
+        currentPage: _getCurrentPage(state),
+        isFetching: _getIsFetching(state),
+        followingInProgress: _getFollowingInProgress(state)
     }
-
-    return (
-        <>
-            {props.isFetching ? <Preloader /> : null}
-            <Users totalUsersCount={props.totalUsersCount}
-                   pageSize={props.pageSize}
-                   currentPage={props.currentPage}
-                   users={props.users}
-                   onPageChanged={onPageChanged}
-                   follow={props.follow}
-                   unfollow={props.unfollow}
-                   followingInProgress={props.followingInProgress}
-            />
-        </>
-    )
 }
-
-const mapStateToProps = (state: StateType): MapStatePropsType => ({
-    users: getUserSelector(state),
-    pageSize: _getPageSize(state),
-    totalUsersCount: _getTotalUsersCount(state),
-    currentPage: _getCurrentPage(state),
-    isFetching: _getIsFetching(state),
-    followingInProgress: _getFollowingInProgress(state)
-})
 
 export default connect<MapStatePropsType, MapDispatchPropsType, {}, StateType>(mapStateToProps, {
     follow,
