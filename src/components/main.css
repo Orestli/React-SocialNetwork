@@ -22,3 +22,12 @@
 .td-figure:hover img {
     transform: rotate(0);
 }
+
+.main-photo {
+    height: 70px;
+    width: 70px;
+}
+
+.contact-field {
+    padding-left: 10px;
+}

@@ -1,10 +1,16 @@
 import React, {useState} from 'react';
 import './Paginator.css'
 
-const Paginator = (props) => {
-    const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
+type PropsType = {
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    onPageChanged: (pageNumber: number) => void
+}
 
-    const pages = [];
+const Paginator: React.FC<PropsType> = ({totalUsersCount, pageSize, currentPage, onPageChanged}) => {
+    const pagesCount = Math.ceil(totalUsersCount / pageSize);
+    const pages: Array<number> = [];
 
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
@@ -25,12 +31,11 @@ const Paginator = (props) => {
                 pages
                     .filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
                     .map(p => {
-                    return (
-                        <span className={props.currentPage === p && 'selectedPage'}
-                              onClick={(e) => {
-                                  props.onPageChanged(p)
-                              }}>{p} </span>
-                    )
+                        // @ts-ignore
+                        return <span className={currentPage === p && 'selectedPage'}
+                                           onClick={(e) => {
+                                               onPageChanged(p)
+                                           }}>{p} </span>;
                 })
             }
             {

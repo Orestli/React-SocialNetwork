@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import '../main.css'
 import Preloader from "../common/Preloader/Preloader";
 import {Field, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../../utils/validators/validators";
 import {Element} from "../common/FormsContorls/FormsContorls";
 import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
+import defaultAvatar from '../../assets/images/default_ava.png'
+import {ProfileData, ProfileDataFormRedux} from "./ProfileData";
 
 const Post = (props) => (
     [...props.posts].reverse().map(data => {
@@ -33,12 +35,25 @@ let AddNewPostForm = (props) => {
 AddNewPostForm = reduxForm({form: 'AddNewPostForm'})(AddNewPostForm)
 
 function Profile(props) {
+    const [editMode, setEditMode] = useState(false)
+
     if (!props.profile) {
         return <Preloader />
     }
 
     function addNewPost(value) {
         props.addPost(value.messageContent);
+    }
+
+    const updatePhoto = (e) => {
+        props.updatePhoto(e.target.files[0])
+    }
+
+    const onSubmit = (formData) => {
+        props.updateProfile(formData)
+            .then(() => {
+                setEditMode(false)
+            })
     }
 
     return (
@@ -49,9 +64,12 @@ function Profile(props) {
                 </figure>
             </div>
             <div className="author">
-                <img src={props.profile.photos.large} alt=""/>
-                <p>Name: {props.profile.fullName}</p>
+                <img className={'main-photo'} src={props.profile.photos.large || defaultAvatar} alt=""/>
+                {props.isOwner && <input type={'file'} onChange={updatePhoto}/>}
                 <ProfileStatusWithHooks status={props.status} updateStatus={props.updateStatus} />
+                {editMode ?
+                    <ProfileDataFormRedux initialValues={props.profile} profile={props.profile} onSubmit={onSubmit}/> :
+                    <ProfileData profile={props.profile} isOwner={props.isOwner} editMode={() => {setEditMode(true)}}/>}
             </div>
             <AddNewPostForm onSubmit={addNewPost}/>
             <Post posts={props.posts} />
